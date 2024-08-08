@@ -1,0 +1,84 @@
+package com.cnfd;
+
+import java.util.Scanner;
+
+interface Personal {
+    void personalDetails();
+}
+
+interface Official {
+    void officialDetails();
+}
+
+abstract class Pperson implements Personal, Official {
+    public String name;
+    public String address;
+    public double phone;
+
+    public Pperson(String name, String address, double phone) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+    }
+}
+
+class Employee extends Pperson {
+    private int empid;
+    private String company;
+    private String designation;
+
+    // Constructor
+    public Employee(String name, String address, double phone, int empid, String company, String designation) {
+        super(name, address, phone);
+        this.empid = empid;
+        this.company = company;
+        this.designation = designation;
+    }
+
+    @Override
+    public void personalDetails() {
+        System.out.println("Personal Details:");
+        System.out.println("Name: " + name);
+        System.out.println("Address: " + address);
+        System.out.println("Phone: " + phone);
+    }
+
+    @Override
+    public void officialDetails() {
+        System.out.println("Official Details:");
+        System.out.println("Employee ID: " + empid);
+        System.out.println("Company: " + company);
+        System.out.println("Designation: " + designation);
+    }
+}
+
+public class Inh {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input for personal details
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter address: ");
+        String address = scanner.nextLine();
+        System.out.print("Enter phone: ");
+        double phone = scanner.nextDouble();
+        scanner.nextLine();  // Consume newline
+
+        // Input for official details
+        System.out.print("Enter employee ID: ");
+        int empid = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+        System.out.print("Enter company: ");
+        String company = scanner.nextLine();
+        System.out.print("Enter designation: ");
+        String designation = scanner.nextLine();
+
+        // Create Employee object using the constructor
+        Employee employee = new Employee(name, address, phone, empid, company, designation);
+
+        // Display details
+        employee.personalDetails();
+        employee.officialDetails();
+    }
+}

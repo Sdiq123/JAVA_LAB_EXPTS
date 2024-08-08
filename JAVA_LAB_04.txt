@@ -1,0 +1,123 @@
+package programme4;
+
+import java.util.Scanner;
+
+interface MediaPlayer {
+    void play(String audioType, String fileName);
+}
+
+interface AdvancedMediaPlayer {
+    void playVlc(String fileName);
+    void playMp4(String fileName);
+}
+
+class MediaAdapter implements MediaPlayer {
+
+    AdvancedMediaPlayer advancedMusicPlayer;
+
+    public MediaAdapter(String audioType){
+        if(audioType.equalsIgnoreCase("vlc") ){
+            advancedMusicPlayer = new VlcPlayer();
+        } else if (audioType.equalsIgnoreCase("mp4")){
+            advancedMusicPlayer = new Mp4Player();
+        }
+    }
+
+    @Override
+    public void play(String audioType, String fileName) {
+        if(advancedMusicPlayer != null) {
+            if(audioType.equalsIgnoreCase("vlc")){
+                advancedMusicPlayer.playVlc(fileName);
+            } else if(audioType.equalsIgnoreCase("mp4")){
+                advancedMusicPlayer.playMp4(fileName);
+            }
+        } else {
+            System.out.println("Invalid media. " + audioType + " format not supported");
+        }
+    }
+}
+
+class VlcPlayer implements AdvancedMediaPlayer {
+
+    @Override
+    public void playVlc(String fileName) {
+        System.out.println("Playing vlc file. Name: " + fileName);
+    }
+
+    @Override
+    public void playMp4(String fileName) {
+        System.out.println("Cannot play mp4 file on VLC player.");
+    }
+}
+
+class Mp4Player implements AdvancedMediaPlayer {
+
+    @Override
+    public void playVlc(String fileName) {
+        System.out.println("Cannot play vlc file on MP4 player.");
+    }
+
+    @Override
+    public void playMp4(String fileName) {
+        System.out.println("Playing mp4 file. Name: " + fileName);
+    }
+}
+
+class AudioPlayer implements MediaPlayer {
+    MediaAdapter mediaAdapter;
+
+    @Override
+    public void play(String audioType, String fileName) {
+        if(audioType.equalsIgnoreCase("mp3")){
+            System.out.println("Playing mp3 file. Name: " + fileName);
+        } else if(audioType.equalsIgnoreCase("vlc") || audioType.equalsIgnoreCase("mp4")){
+            mediaAdapter = new MediaAdapter(audioType);
+            mediaAdapter.play(audioType, fileName);
+        } else{
+            System.out.println("Invalid media. " + audioType + " format not supported");
+        }
+    }
+}
+
+public class Audiomain {
+
+    public static void main(String[] args) {
+        MediaPlayer audioPlayer = new AudioPlayer();
+        Scanner scanner = new Scanner(System.in);
+        
+        while (true) {
+            System.out.println("Choose an option:");
+            System.out.println("1. Play MP3");
+            System.out.println("2. Play MP4");
+            System.out.println("3. Play VLC");
+            System.out.println("4. Exit");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline
+            
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter MP3 file name: ");
+                    String mp3File = scanner.nextLine();
+                    audioPlayer.play("mp3", mp3File);
+                    break;
+                case 2:
+                    System.out.print("Enter MP4 file name: ");
+                    String mp4File = scanner.nextLine();
+                    audioPlayer.play("mp4", mp4File);
+                    break;
+                case 3:
+                    System.out.print("Enter VLC file name: ");
+                    String vlcFile = scanner.nextLine();
+                    audioPlayer.play("vlc", vlcFile);
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
+
