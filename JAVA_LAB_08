@@ -1,0 +1,95 @@
+package lab8;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
+// Step 1: Create a class with UpperBound Wildcard
+class NumberList<T extends Number & Comparable<T>> {
+    private final List<T> numbers;
+
+    public NumberList() {
+        numbers = new ArrayList<>();
+    }
+
+    public void addNumber(T number) {
+        numbers.add(number);
+    }
+
+    public List<T> getNumbers() {
+        return numbers;
+    }
+}
+
+// Step 2: Create sum and sort methods
+class Operations {
+
+    // Method to calculate the sum of elements in a list
+    public static <T extends Number> double sum(List<T> list) {
+        double sum = 0.0;
+        for (T number : list) {
+            sum += number.doubleValue();
+        }
+        return sum;
+    }
+
+    // Method to sort elements in a list
+    public static <T extends Number & Comparable<T>> void sort(List<T> list) {
+        Collections.sort(list);
+    }
+}
+
+// Step 3: Design a menu-driven program
+public class MainGenericsExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        NumberList<Integer> integerList = new NumberList<>();
+        NumberList<Double> doubleList = new NumberList<>();
+
+        while (true) {
+            System.out.println("\n--- Number Operations ---");
+            System.out.println("1. Add Integer");
+            System.out.println("2. Add Double");
+            System.out.println("3. Calculate Sum");
+            System.out.println("4. Sort Numbers");
+            System.out.println("5. Display Numbers");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Integer value: ");
+                    int intValue = scanner.nextInt();
+                    integerList.addNumber(intValue);
+                    break;
+                case 2:
+                    System.out.print("Enter Double value: ");
+                    double doubleValue = scanner.nextDouble();
+                    doubleList.addNumber(doubleValue);
+                    break;
+                case 3:
+                    double sum = Operations.sum(integerList.getNumbers()) + Operations.sum(doubleList.getNumbers());
+                    System.out.println("Sum of numbers: " + sum);
+                    break;
+                case 4:
+                    Operations.sort(integerList.getNumbers());
+                    Operations.sort(doubleList.getNumbers());
+                    System.out.println("Numbers sorted.");
+                    break;
+                case 5:
+                    System.out.println("Integers: " + integerList.getNumbers());
+                    System.out.println("Doubles: " + doubleList.getNumbers());
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
